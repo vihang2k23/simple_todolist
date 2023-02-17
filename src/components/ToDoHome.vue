@@ -1,10 +1,52 @@
-<template>
-  <div b-container>
+<template class="conatiner m-0 p-0">
+<div class="conatiner m-0 p-0">
+  
+  <div>
+<b-navbar></b-navbar>
+    <b-navbar-brand ><router-link to="/addtask"></router-link></b-navbar-brand>
 
+    <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+
+    <b-collapse id="nav-collapse" is-nav>
+      <b-navbar-nav>
+        <b-nav-item href="#">Link</b-nav-item>
+        <b-nav-item href="#" disabled>Disabled</b-nav-item>
+      </b-navbar-nav>
+
+      <!-- Right aligned nav items -->
+      <b-navbar-nav class="ml-auto">
+        <b-nav-form>
+          <b-form-input size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>
+          <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
+        </b-nav-form>
+
+        <b-nav-item-dropdown text="Lang" right>
+          <b-dropdown-item href="#">EN</b-dropdown-item>
+          <b-dropdown-item href="#">ES</b-dropdown-item>
+          <b-dropdown-item href="#">RU</b-dropdown-item>
+          <b-dropdown-item href="#">FA</b-dropdown-item>
+        </b-nav-item-dropdown>
+
+        <b-nav-item-dropdown right>
+          <!-- Using 'button-content' slot -->
+          <template #button-content>
+            <em>User</em>
+          </template>
+          <b-dropdown-item href="#">Profile</b-dropdown-item>
+          <b-dropdown-item href="#">Sign Out</b-dropdown-item>
+        </b-nav-item-dropdown>
+      </b-navbar-nav>
+    </b-collapse>
+  </b-navbar>
+  
+  </div>
+
+  
+  <div b-container>
     <div v-for="data in todos" :key="data.id">
-      <b-row>
+      <b-row v-if="data">
         <b-col cols="3"></b-col>
-        <b-col cols="6" class="mt-4">
+        <b-col  cols="6" class="mt-4">
           <b-card
             border-variant="primary"
             :header="data.taskName"
@@ -16,24 +58,28 @@
             <template #footer>
               <div>
                 <b-form-checkbox
-      id="checkbox-1"
-      
-      name="checkbox-1"
-      value="accepted"
-                
-    >
-     {{ data.status }}
-    </b-form-checkbox>
+                  id="checkbox-1"
+                  name="checkbox-1"
+                  value="accepted"
+                  v-model="data.taskstatus"
+                  
+                >
+               <span class="p-2">   {{ data.status == "true" ? "Done" :"Not Done" }}</span>
+                 
+                </b-form-checkbox>
                 <b-button class="p-2 m-2">Edit</b-button>
                 <b-button v-on:click="removeItem(data.id)">Delete</b-button>
               </div>
             </template>
           </b-card>
         </b-col>
+        
         <b-col cols="3"></b-col>
       </b-row>
     </div>
+   
   </div>
+</div>
 </template>
 <script>
 import axios from "axios";
@@ -43,11 +89,11 @@ export default {
   data() {
     return {
       todos: [],
-      upstatus: "",
+      status: "",
     };
   },
-  methods:{
-    removeItem(id) {
+  methods: {
+    removetask(id) {
       axios.delete(`http://localhost:3000/tasks/${id}`);
       this.todos = this.todos.filter((tododata) => tododata.id !== id);
     },
