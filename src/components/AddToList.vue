@@ -24,11 +24,11 @@
       <div class="task-status">
         <span class="gender-title">Task Status</span><br />
 
-        <input name="status" id="dot-1" value="1" type="radio" v-model.lazy="todotask.status" />
+        <input name="status" id="dot-1" value="true" type="radio" v-model.lazy="todotask.status" />
         <label class=".label" for="dot-1">
           <span>Done</span>
         </label>
-        <input name="gender" id="dot-2" value="2" type="radio" v-model.lazy="todotask.status" />
+        <input name="gender" id="dot-2" value="false" type="radio" v-model.lazy="todotask.status" />
         <label for="dot-2" class=".label">
           <span>Not Done</span>
         </label>

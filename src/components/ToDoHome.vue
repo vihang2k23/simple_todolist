@@ -1,127 +1,43 @@
 <template>
-  <div class="col-xl-12">
-    <div class="row">
-      <div class="container">
-        <section class="vh-100 gradient-custom-2">
-          <div class="container py-5 h-100">
-            <div
-              class="row d-flex justify-content-center align-items-center h-100"
-            >
-              <div class="col-md-12 col-xl-12">
-                <div class="card mask-custom">
-                  <div
-                    class="card-body p-4 text-white"
-                    style="background-color: rgb(126 64 246)"
-                  >
-                    <div class="text-center pt-3 pb-2">
-                      <img
-                        src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-todo-list/check1.webp"
-                        alt="Check"
-                        width="60"
-                      />
-                      <h2 class="my-4">Task List</h2>
-                      <button class="btn btn-dark" style="float: right">
-                        <router-link to="/Addtask">Add To List</router-link>
-                      </button>
-                    </div>
+  <div b-container>
 
-                    <table class="table text-white mb-0">
-                      <thead>
-                        <tr>
-                          <th scope="col">Status</th>
-                          <th scope="col">Task</th>
-                          <th scope="col">Priority</th>
-                          <th scope="col">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr
-                          class="fw-normal"
-                          v-for="tododata in todos"
-                          :key="tododata.id"
-                        >
-                          <div class="form-check">
-                            <input
-                              @click="boughtItem(tododata)"
-                              class="form-check-input"
-                              type="checkbox"
-                              v-model="tododata.status"
-                            />
-
-                            <label
-                              class="form-check-label"
-                              for="flexCheckCheckedDisabled"
-                            >
-                              {{ tododata.status ? "Done" : "Undone" }}
-                            </label>
-                          </div>
-                          <td class="align-middle">
-                            <span
-                              v-bind:class="tododata.status ? 'isclicked' : ''"
-                              >{{ tododata.taskName }}</span
-                            >
-                          </td>
-                          <td class="align-middle">
-                            <h6 class="mb-0">
-                              <span
-                                v-if="tododata.addpriority == 'high'"
-                                class="badge bg-danger"
-                                >{{ tododata.addpriority }}</span
-                              >
-                              <span
-                                v-if="tododata.addpriority == 'medium'"
-                                class="badge bg-warning"
-                                >{{ tododata.addpriority }}</span
-                              >
-                              <span
-                                v-if="tododata.addpriority == 'low'"
-                                class="badge bg-success"
-                                >{{ tododata.addpriority }}</span
-                              >
-                            </h6>
-                          </td>
-                          <td class="align-middle">
-                            <!-- <a href="#!" data-mdb-toggle="tooltip" title="Done"
-                          ><i class="fas fa-check fa-lg text-success me-3"></i
-                        ></a>
-                        <a
-                          href="#!"
-                          data-mdb-toggle="tooltip"
-                          title="Remove"
-                          style="color: red"
-                          ><i
-                            class="fas fa-trash-alt fa-lg text-warning"
-                            style="color: red"
-                          ></i
-                        ></a> -->
-                            <button class="btn btn-warning">
-                              <router-link v-bind:to="'/editask/' + tododata.id"
-                                >Edit</router-link
-                              >
-                              <!-- to="{ name: '/editask/', params: { Id: tododata.id }" -->
-                              <!-- to="{ path: '/editask/', params: { id: {{ tododata.id }} }" --></button
-                            >&nbsp;
-                            <button
-                              class="btn btn-danger"
-                              v-on:click="removeItem(tododata.id)"
-                            >
-                              Delete
-                            </button>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
+    <div v-for="data in todos" :key="data.id">
+      <b-row>
+        <b-col cols="3"></b-col>
+        <b-col cols="6" class="mt-4">
+          <b-card
+            border-variant="primary"
+            :header="data.taskName"
+            header-bg-variant="primary"
+            header-text-variant="white"
+            align="center"
+          >
+            <b-card-text>{{ data.taskcontent }}</b-card-text>
+            <template #footer>
+              <div>
+                <b-form-checkbox
+      id="checkbox-1"
+      
+      name="checkbox-1"
+      value="accepted"
+                
+    >
+     {{ data.status }}
+    </b-form-checkbox>
+                <b-button class="p-2 m-2">Edit</b-button>
+                <b-button v-on:click="removeItem(data.id)">Delete</b-button>
               </div>
-            </div>
-          </div>
-        </section>
-      </div>
+            </template>
+          </b-card>
+        </b-col>
+        <b-col cols="3"></b-col>
+      </b-row>
     </div>
   </div>
 </template>
 <script>
+import axios from "axios";
+
 export default {
   name: "App",
   data() {
@@ -130,8 +46,22 @@ export default {
       upstatus: "",
     };
   },
-  methods: {
-    mounted() {},
+  methods:{
+    removeItem(id) {
+      axios.delete(`http://localhost:3000/tasks/${id}`);
+      this.todos = this.todos.filter((tododata) => tododata.id !== id);
+    },
+  },
+
+  async created() {
+    try {
+      const response = await axios.get("http://localhost:3000/tasks");
+      console.log(response);
+      this.todos = response.data;
+      console.log(this.todos);
+    } catch (e) {
+      console.log(e);
+    }
   },
 };
 </script>
