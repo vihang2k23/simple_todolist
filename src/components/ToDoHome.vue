@@ -1,85 +1,108 @@
 <template class="conatiner m-0 p-0">
-<div class="conatiner m-0 p-0">
-  
-  <div>
-<b-navbar></b-navbar>
-    <b-navbar-brand ><router-link to="/addtask"></router-link></b-navbar-brand>
+  <div class="conatiner m-0 p-0">
+    <div b-container>
+      <b-navbar type="light" variant="dark">
+        <!-- // Navigation button to Add task -->
+        <b-button pill variant="light" class="mx-5" type="submit"><router-link to="/Addtask"
+            class="text-dark">Addtask</router-link></b-button>
 
-    <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+        <!-- Filter Your task -->
+        <b-form-input placeholder="Search" class="w-25" size="sm" v-model="search"></b-form-input>
 
-    <b-collapse id="nav-collapse" is-nav>
-      <b-navbar-nav>
-        <b-nav-item href="#">Link</b-nav-item>
-        <b-nav-item href="#" disabled>Disabled</b-nav-item>
-      </b-navbar-nav>
-
-      <!-- Right aligned nav items -->
-      <b-navbar-nav class="ml-auto">
-        <b-nav-form>
-          <b-form-input size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>
-          <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
-        </b-nav-form>
-
-        <b-nav-item-dropdown text="Lang" right>
-          <b-dropdown-item href="#">EN</b-dropdown-item>
-          <b-dropdown-item href="#">ES</b-dropdown-item>
-          <b-dropdown-item href="#">RU</b-dropdown-item>
-          <b-dropdown-item href="#">FA</b-dropdown-item>
-        </b-nav-item-dropdown>
-
-        <b-nav-item-dropdown right>
-          <!-- Using 'button-content' slot -->
-          <template #button-content>
-            <em>User</em>
-          </template>
-          <b-dropdown-item href="#">Profile</b-dropdown-item>
-          <b-dropdown-item href="#">Sign Out</b-dropdown-item>
-        </b-nav-item-dropdown>
-      </b-navbar-nav>
-    </b-collapse>
-  </b-navbar>
-  
-  </div>
-
-  
-  <div b-container>
-    <div v-for="data in todos" :key="data.id">
-      <b-row v-if="data">
-        <b-col cols="3"></b-col>
-        <b-col  cols="6" class="mt-4">
-          <b-card
-            border-variant="primary"
-            :header="data.taskName"
-            header-bg-variant="primary"
-            header-text-variant="white"
-            align="center"
-          >
-            <b-card-text>{{ data.taskcontent }}</b-card-text>
-            <template #footer>
-              <div>
-                <b-form-checkbox
-                  id="checkbox-1"
-                  name="checkbox-1"
-                  value="accepted"
-                  v-model="data.taskstatus"
-                  
-                >
-               <span class="p-2">   {{ data.status == "true" ? "Done" :"Not Done" }}</span>
-                 
-                </b-form-checkbox>
-                <b-button class="p-2 m-2">Edit</b-button>
-                <b-button v-on:click="removeItem(data.id)">Delete</b-button>
-              </div>
-            </template>
-          </b-card>
-        </b-col>
-        
-        <b-col cols="3"></b-col>
+      </b-navbar>
+      <b-row class="mt-5"><b-col><span class="bg-danger w-100 p-2"> &#128515; </span>
+          <span> &nbsp;- High Priority </span><span class="bg-warning w-100 p-2"> &#128515; </span>
+          <span> &nbsp;- Medium Priority </span>
+          <span class="bg-success  w-100 p-2"> &#128515; </span>
+          <span> &nbsp;- Low Priority </span></b-col>
       </b-row>
+      <!-- Display your task -->
+      <div v-for="data in   filtertask" :key="data.id">
+
+
+        <b-row>
+          <b-col cols="3"></b-col>
+          <b-col v-show="data" cols="6" class="mt-4">
+            <!-- High Priority task code -->
+            <span v-if="data.addpriority == 'high'"><b-card border-variant="danger" :header="data.taskname"
+                header-bg-variant="danger" header-text-variant="white" align="center">
+                <!-- display task content -->
+                <b-card-text>{{ data.taskcontent }}</b-card-text>
+                <template #footer>
+                  <!-- //display status of task  -->
+                  <div>
+                    <input @click="boughtItem(data)" class="form-check-input my-3 p-2" type="checkbox"
+                      v-model="data.status" />
+                    <span class="mx-2">{{
+                      data.status ? "Done" : "Not Done"
+                    }}</span>
+                    <!-- //navigate to edit task -->
+                    <b-button class="p-2 m-2"><router-link v-bind:to="'/editask/' + data.id"
+                        class="text-white">Edit</router-link></b-button>
+                    <!-- //navigate to delete button -->
+                    <b-button v-on:click="removetask(data.id)">Delete</b-button>
+                  </div>
+                </template>
+              </b-card></span>
+            <!-- Medium Priority task code -->
+            <span v-if="data.addpriority == 'medium'"><b-card v-if="data.addpriority == 'medium'" border-variant="warning"
+                :header="data.taskname" header-bg-variant="warning" header-text-variant="white"
+                align="center"><!-- display task content -->
+                <b-card-text>{{ data.taskcontent }}</b-card-text>
+                <template #footer>
+                  <!-- //display status of task  -->
+                  <div>
+                    <input @click="boughtItem(data)" class="form-check-input my-3 p-2" type="checkbox"
+                      v-model="data.status" />
+                    <span class="mx-2">{{
+                      data.status ? "Done" : "Not Done"
+                    }}</span>
+                    <!-- //navigate to edit task -->
+                    <b-button class="p-2 m-2"><router-link v-bind:to="'/editask/' + data.id"
+                        class="text-white">Edit</router-link></b-button>
+                    <!-- //navigate to delete button -->
+                    <b-button v-on:click="removetask(data.id)">Delete</b-button>
+                  </div>
+                </template>
+              </b-card></span>
+
+            <!-- Low Priority task code -->
+            <span v-if="data.addpriority == 'low'">
+              <b-card v-if="data.addpriority == 'low'" border-variant="success" :header="data.taskname"
+                header-bg-variant="success" header-text-variant="white" align="center">
+                <!-- display task content -->
+                <b-card-text>{{ data.taskcontent }}</b-card-text>
+                <template #footer>
+                  <!-- //display status of task  -->
+                  <div>
+                    <input @click="boughtItem(data)" class="form-check-input my-3 p-2" type="checkbox"
+                      v-model="data.status" />
+                    <span class="mx-2">{{
+                      data.status ? "Done" : "Not Done"
+                    }}</span>
+                    <!-- //navigate to edit task -->
+                    <b-button class="p-2 m-2"><router-link v-bind:to="'/editask/' + data.id"
+                        class="text-white">Edit</router-link></b-button>
+                    <!-- //navigate to delete button -->
+                    <b-button v-on:click="removetask(data.id)">Delete</b-button>
+                  </div>
+                </template>
+              </b-card></span>
+            <!-- display task name -->
+          </b-col>
+
+          <b-col cols="3"></b-col>
+        </b-row>
+      </div>
+      <div v-show="!todos.length" class=" mt-5 mx-5 "><b-card bg-variant="secondary" text-variant="white"
+          class="text-center" title="Sorry...!!">
+          <b-card-text text-variant="white">
+            Task is not Available
+          </b-card-text>
+
+        </b-card></div>
     </div>
-   
   </div>
-</div>
 </template>
 <script>
 import axios from "axios";
@@ -90,39 +113,97 @@ export default {
     return {
       todos: [],
       status: "",
+      search: ""
     };
   },
-  methods: {
-    removetask(id) {
-      axios.delete(`http://localhost:3000/tasks/${id}`);
-      this.todos = this.todos.filter((tododata) => tododata.id !== id);
-    },
-  },
-
+  //Get data Function 
   async created() {
     try {
       const response = await axios.get("http://localhost:3000/tasks");
       console.log(response);
       this.todos = response.data;
-      console.log(this.todos);
+      // console.log(this.todos.filter((data)=>{console.log(data.taskname.match(this.search))}));
     } catch (e) {
       console.log(e);
     }
   },
+  //Filter Data
+  computed: {
+    filtertask() {
+      return this.todos.filter((data) => {
+        console.log(data)
+        return data.taskname.match(this.search)
+      })
+    }
+  },
+  methods: {
+
+
+    removetask(id) {
+      console.log(id, "id--->");
+      axios.delete(`http://localhost:3000/tasks/${id}`);
+      this.todos = this.todos.filter((tododata) => tododata.id !== id);
+      console.log(this.todos);
+    },
+    async boughtItem(t_status) {
+      console.log(t_status);
+      if (t_status.status == "false") {
+        try {
+          const user = await axios.put(
+            "http://localhost:3000/tasks/" + t_status.id,
+            {
+              taskname: t_status.this.taskname,
+              taskcontent: t_status.taskcontent,
+              addpriority: t_status.addpriority,
+
+              status: false,
+            }
+          );
+
+          console.log(user);
+          alert("User updated!");
+          // location.reload();
+          this.todos = user.data;
+        } catch (e) {
+          console.log(e);
+        }
+      } else {
+        try {
+          const response = await axios.put(
+            "http://localhost:3000/tasks/" + t_status.id,
+            {
+              taskname: t_status.taskname,
+              taskcontent: t_status.taskcontent,
+              addpriority: t_status.addpriority,
+
+              status: false,
+            }
+          );
+          console.log("response", response);
+          this.alert("Status Updated");
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    },
+    alert(data) {
+      this.$swal(data);
+    },
+  },
+
+
+
+
 };
 </script>
 <style scoped>
 .gradient-custom-2 {
-  background: linear-gradient(
-    to right,
-    rgba(126, 64, 246, 1),
-    rgba(80, 139, 252, 1)
-  );
-  background-image: linear-gradient(
-    to right,
-    rgb(126, 64, 246),
-    rgb(80, 139, 252)
-  );
+  background: linear-gradient(to right,
+      rgba(126, 64, 246, 1),
+      rgba(80, 139, 252, 1));
+  background-image: linear-gradient(to right,
+      rgb(126, 64, 246),
+      rgb(80, 139, 252));
   background-position-x: initial;
   background-position-y: initial;
   background-size: initial;
@@ -133,9 +214,11 @@ export default {
   border-radius: 0.5rem 0.5rem rem 0 0;
   margin: auto;
 }
+
 a {
   text-decoration: none;
 }
+
 .isclicked {
   text-decoration: line-through;
 }

@@ -70,7 +70,7 @@ export default {
       console.log("data", this.todotask);
       try {
         const response = await axios.post(`http://localhost:3000/tasks`, {
-          taskName: this.todotask.taskname,
+          taskname: this.todotask.taskname,
           taskcontent: this.todotask.taskcontent,
           addpriority: this.todotask.addpriority,
           status: this.todotask.status,
