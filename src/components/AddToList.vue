@@ -26,11 +26,11 @@
 
         <input name="status" id="dot-1" value="true" type="radio" v-model.lazy="todotask.status" />
         <label class=".label" for="dot-1">
-          <span>Done</span>
+          <span class="mx-2">Done</span>
         </label>
         <input name="gender" id="dot-2" value="false" type="radio" v-model.lazy="todotask.status" />
         <label for="dot-2" class=".label">
-          <span>Not Done</span>
+          <span class="mx-2"> Not Done</span>
         </label>
       </div>
       <hr />
@@ -65,10 +65,12 @@ export default {
       submitted: false,
     };
   },
+  // Insert method
   methods: {
     async postdata() {
       console.log("data", this.todotask);
-      try {
+      if(this.todotask.addpriority && this.todotask.taskname && this.todotask.taskcontent && this.todotask.status!== null ){
+        try {
         const response = await axios.post(`http://localhost:3000/tasks`, {
           taskname: this.todotask.taskname,
           taskcontent: this.todotask.taskcontent,
@@ -80,6 +82,9 @@ export default {
         this.alert("User Added!");
       } catch (e) {
         console.log(e);
+      }
+      }else{
+        this.alert("Please Fill all Details ")
       }
     },
     alert(data) {

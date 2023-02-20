@@ -19,6 +19,16 @@ Vue.use(JumbotronPlugin)
 
 Vue.use(VueRouter);
 Vue.use(swal)
+
+Vue.filter("uppercase",(value)=>{
+  if (!value) return ''
+  value = value.toString()
+  return value.charAt(0).toUpperCase() + value.slice(1)
+})
+Vue.filter("snippet",(value)=>{
+return value.slice(0,100) + "...."
+})
+
 const router = new VueRouter({
   routes: Routes,
   mode: "history",

@@ -35,7 +35,7 @@
           v-model.lazy="todata.status"
         />
         <label class=".label" for="dot-1">
-          <span>Done</span>
+          <span class="mx-2">Done</span>
         </label>
         <input
           name="gender"
@@ -44,8 +44,8 @@
           type="radio"
           v-model.lazy="todata.status"
         />
-        <label for="dot-2" class=".label">
-          <span>Not Done</span>
+        <label for="dot-2" class="label">
+          <span class="mx-2"> Not Done</span>
         </label>
       </div>
       <hr />
@@ -71,6 +71,7 @@ export default {
       submitted: false,
     };
   },
+  // Get data based on id
   async mounted() {
     axios
       .get("http://localhost:3000/tasks/" + this.$route.params.id)
@@ -84,6 +85,8 @@ export default {
       .finally(() => (this.loading = false));
     console.log(this.todata);
   },
+
+  // Update Method
   methods: {
     async updatedata(id) {
       try {
