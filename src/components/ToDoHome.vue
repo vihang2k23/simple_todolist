@@ -168,6 +168,8 @@
 </template>
 <script>
 import axios from "axios";
+import swal from 'sweetalert';
+
 
 export default {
   name: "App",
@@ -202,10 +204,30 @@ export default {
   methods: {
     //Delete Task
     removetask(id) {
-      console.log(id, "id--->");
+
+
+      swal({
+  title: "Are you sure?",
+  text: "Once deleted, you will not be able to recover this task details!",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+})
+.then((willDelete) => {
+  if (willDelete) {
+    console.log(id, "id--->");
       axios.delete(`http://localhost:3000/tasks/${id}`);
       this.todos = this.todos.filter((tododata) => tododata.id !== id);
       console.log(this.todos);
+    swal("Poof! Your task details has been deleted!", {
+      icon: "success",
+    });
+  } else {
+    swal("Your task details  is safe!");
+  }
+});
+
+      
     },
 
     // To Update Status
