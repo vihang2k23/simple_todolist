@@ -210,24 +210,24 @@ export default {
 
     // To Update Status
     async boughtItem(t_status) {
-      console.log(t_status);
-      if (t_status.status == "false") {
+      console.log(t_status.status == false);
+      if (t_status.status == false) {
         try {
           const user = await axios.put(
             "http://localhost:3000/tasks/" + t_status.id,
             {
-              taskname: t_status.this.taskname,
+              taskname: t_status.taskname,
               taskcontent: t_status.taskcontent,
               addpriority: t_status.addpriority,
 
-              status: false,
+              status: true,
             }
           );
 
-          console.log(user);
-          alert("User updated!");
+          console.log(user.data);
+          this.alert("User updated!");
           // location.reload();
-          this.todos = user.data;
+          
         } catch (e) {
           console.log(e);
         }
@@ -243,7 +243,8 @@ export default {
               status: false,
             }
           );
-          console.log("response", response);
+          this.status = response.data.status;
+          console.log("response", response.data);
           this.alert("Status Updated");
         } catch (e) {
           console.log(e);
